@@ -30,8 +30,7 @@ public class Auction
      */
     public void enterLot(String description)
     {
-        lots.add(new Lot(nextLotNumber, description));
-        nextLotNumber++;
+        lots.add(new Lot(nextLotNumber++, description));
     }
 
     /**
@@ -65,7 +64,7 @@ public class Auction
             }
             else {
                 // Report which bid is higher.
-                Bid highestBid = selectedLot.getHighestBid();
+                Bid highestBid = null;
                 System.out.println("Lot number: " + lotNumber +
                                    " already has a bid of: " +
                                    highestBid.getValue());
