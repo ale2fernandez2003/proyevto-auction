@@ -78,21 +78,26 @@ public class Auction
      */
     public Lot getLot(int lotNumber)
     {
-        int index = 0;
-        Lot foundLot = null;
-        while (index < lots.size() && foundLot == null) {
-            Lot lot = lots.get(index);
-            if (lot.getNumber() == lotNumber) {
-                foundLot = lot;
+        if((lotNumber >= 1) && (lotNumber < nextLotNumber)) {
+            // The number seems to be reasonable.
+            Lot selectedLot = lots.get(lotNumber - 1);
+            // Include a confidence check to be sure we have the
+            // right lot.
+            if(selectedLot.getNumber() != lotNumber) {
+                System.out.println("Internal error: Lot number " +
+                                   selectedLot.getNumber() +
+                                   " was returned instead of " +
+                                   lotNumber);
+                // Don't return an invalid lot.
+                selectedLot = null;
             }
-            index++;
+            return selectedLot;
         }
-
-        if (foundLot == null) {
-            System.out.println("El numero de lote:" + lotNumber + " no existe.");
+        else {
+            System.out.println("Lot number: " + lotNumber +
+                               " does not exist.");
+            return null;
         }
-
-        return foundLot;
     }
     
     public void close() {
@@ -116,5 +121,21 @@ public class Auction
             }
         }
         return unsoldLots;
+    }
+    
+    /** 
+     * Elimina el lote con el número de lote especificado.
+     * @param number El número del lote que hay que eliminar,
+     * @return El lote con el número dado o null si no existe tal lote.
+     */
+    public Lot removeLot(int number) {
+        Lot lotToRemove = getLot(number);
+        if (lotToRemove != null) {
+            lots.remove(lotToRemove);
+        } 
+        else {
+            System.out.println("El numero de Lot: " + number + " no existe");
+        }
+        return lotToRemove;
     }
 }
